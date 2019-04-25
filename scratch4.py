@@ -2,6 +2,7 @@ import arcade
 import os
 import random
 import math
+import time
 
 SPRITE_SCALING = 0.1
 SPRITE_SCALING_COIN = 0.3
@@ -101,6 +102,24 @@ def make_skyline(width, skyline_height, skyline_color,
         building_center_x += (building_width / 2)
 
     return shape_list
+
+class Timer():
+    def __init__(self):
+        from time import perf_counter as time
+        self.time = time
+        self.start_time = self.time()
+    
+    def current_time(self):
+        return self.time() - self.start_time
+    
+    def reset(self):
+        self.start_time = self.time()
+    
+    def set_time_limit(self, new_time):
+        self.time_limit = new_time
+
+    def get_remaining_time(self):
+        self.time_limit - self.current_time()
 
 class Coin(arcade.Sprite):
     """
