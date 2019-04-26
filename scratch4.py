@@ -3,11 +3,12 @@ import os
 import random
 import math
 import time
+from go import *
 
 SPRITE_SCALING = 0.1
-SPRITE_SCALING_COIN = 0.3
-COIN_COUNT = 40
-COIN_SPEED = 0.5
+SPRITE_SCALING_FROG = 0.3
+FROG_COUNT = 40
+FROG_SPEED = 0.5
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -15,6 +16,8 @@ SCREEN_TITLE = "GU MAI AOW LEAW AI SU"
 
 MOVEMENT_SPEED = 5
 SPRITE_SPEED = 0.5
+
+
 def make_star_field(star_count):
     """ Make a bunch of circles for stars. """
 
@@ -121,7 +124,7 @@ class Timer():
     def get_remaining_time(self):
         self.time_limit - self.current_time()
 
-class Coin(arcade.Sprite):
+class Frog(arcade.Sprite):
     """
     This class represents the coins on our screen. It is a child class of
     the arcade library's "Sprite" class.
@@ -159,8 +162,8 @@ class Coin(arcade.Sprite):
 
             # Taking into account the angle, calculate our change_x
             # and change_y. Velocity is how fast the bullet travels.
-            self.change_x = math.cos(angle) * COIN_SPEED
-            self.change_y = math.sin(angle) * COIN_SPEED
+            self.change_x = math.cos(angle) * FROG_SPEED
+            self.change_y = math.sin(angle) * FROG_SPEED
 
 
 
@@ -206,7 +209,7 @@ class MyGame(arcade.Window):
 
         # Variables that will hold sprite lists
         self.player_list = None
-        self.coin_list = None
+        self.frog_list = None
         # Set up the player info
         self.player_sprite = None
 
@@ -229,7 +232,7 @@ class MyGame(arcade.Window):
 
         # Sprite lists
         self.player_list = arcade.SpriteList()
-        self.coin_list = arcade.SpriteList()
+        self.frog_list = arcade.SpriteList()
 
         # Score
         self.score = 0
@@ -241,30 +244,30 @@ class MyGame(arcade.Window):
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
         # Create the coins
-        for i in range(COIN_COUNT):
+        for i in range(FROG_COUNT):
 
             # Create the coin instance
             frog_face = random.randint(1,8)
             if frog_face == 1:
-                coin = Coin("images/frog/frog1.png", SPRITE_SCALING_COIN)
+                frog = Frog("images/frog/frog1.png", SPRITE_SCALING_FROG)
             if frog_face == 2:
-                coin = Coin("images/frog/frog2.png", SPRITE_SCALING_COIN)
+                frog = Frog("images/frog/frog2.png", SPRITE_SCALING_FROG)
             if frog_face == 3:
-                coin = Coin("images/frog/frog3.png", SPRITE_SCALING_COIN)
+                frog = Frog("images/frog/frog3.png", SPRITE_SCALING_FROG)
             if frog_face == 4:
-                coin = Coin("images/frog/frog4.png", SPRITE_SCALING_COIN)
+                frog = Frog("images/frog/frog4.png", SPRITE_SCALING_FROG)
             if frog_face == 5:
-                coin = Coin("images/frog/frog5.png", SPRITE_SCALING_COIN)
+                frog = Frog("images/frog/frog5.png", SPRITE_SCALING_FROG)
             if frog_face == 6:
-                coin = Coin("images/frog/frog6.png", SPRITE_SCALING_COIN)
+                frog = Frog("images/frog/frog6.png", SPRITE_SCALING_FROG)
             if frog_face == 7:
-                coin = Coin("images/frog/frog7.png", SPRITE_SCALING_COIN)
+                frog = Frog("images/frog/frog7.png", SPRITE_SCALING_FROG   )
             # Position the coin
-            coin.center_x = random.randrange(SCREEN_WIDTH)
-            coin.center_y = random.randrange(SCREEN_HEIGHT)
+            frog.center_x = random.randrange(SCREEN_WIDTH)
+            frog.center_y = random.randrange(SCREEN_HEIGHT)
 
             # Add the coin to the lists
-            self.coin_list.append(coin)
+            self.frog_list.append(frog)
     def on_draw(self):
         """
         Render the screen.
@@ -279,7 +282,7 @@ class MyGame(arcade.Window):
         self.skyline2.draw()
         self.player_list.draw()
 
-        self.coin_list.draw()
+        self.frog_list.draw()
         self.player_list.draw()
 
         # Put the text on the screen.
@@ -289,15 +292,15 @@ class MyGame(arcade.Window):
 
     def update(self, delta_time):
         """ Movement and game logic """
-        for coin in self.coin_list:
-            coin.follow_sprite(self.player_sprite)
+        for frog in self.frog_list:
+            frog.follow_sprite(self.player_sprite)
 
         # Generate a list of all sprites that collided with the player.
-        hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
+        hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.frog_list)
 
         # Loop through each colliding sprite, remove it, and add to the score.
-        for coin in hit_list:
-            coin.kill()
+        for frog in hit_list:
+            frog.kill()
             self.score += 1
 
         # Calculate speed based on the keys pressed
