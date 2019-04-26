@@ -7,13 +7,15 @@ from go import *
 
 SPRITE_SCALING = 0.1
 SPRITE_SCALING_FROG = 0.3
-FROG_COUNT = 30
-BOUNCING_FROG_COUNT = 10
+
+FROG_COUNT = 28
+BOUNCING_FROG_COUNT = 8
+CIRCLR_FROG_COUNT = 4
 FROG_SPEED = 0.5
 
 SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-SCREEN_TITLE = "GU MAI AOW LEAW AI SU"
+SCREEN_HEIGHT = 800
+SCREEN_TITLE = "SUCK MY DICK"
 
 MOVEMENT_SPEED = 5
 SPRITE_SPEED = 0.5
@@ -199,10 +201,8 @@ class MyGame(arcade.Window):
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
-        # Create the coins
-        for i in range(FROG_COUNT):
 
-            # Create the coin instance
+        for i in range(FROG_COUNT):
             frog_face = random.randint(1, 8)
             if frog_face == 1:
                 frog = Frog("images/frog/frog1.png", SPRITE_SCALING_FROG)
@@ -218,27 +218,26 @@ class MyGame(arcade.Window):
                 frog = Frog("images/frog/frog6.png", SPRITE_SCALING_FROG)
             if frog_face == 7:
                 frog = Frog("images/frog/frog7.png", SPRITE_SCALING_FROG)
-            # Position the coin
             frog.center_x = random.randrange(SCREEN_WIDTH)
             frog.center_y = random.randrange(SCREEN_HEIGHT)
-            # Add the coin to the lists
             self.frog_list.append(frog)
 
         for i in range(BOUNCING_FROG_COUNT):
-
-            # Create the coin instance
-            # Coin image from kenney.nl
             bouncing_frog = BouncingFrog(
                 "images/frog/frog8.png", SPRITE_SCALING_FROG)
-
-            # Position the coin
             bouncing_frog.center_x = random.randrange(SCREEN_WIDTH)
             bouncing_frog.center_y = random.randrange(SCREEN_HEIGHT)
             bouncing_frog.change_x = random.randrange(-3, 4)
             bouncing_frog.change_y = random.randrange(-3, 4)
-
-            # Add the coin to the lists
             self.frog_list.append(bouncing_frog)
+        for i in range(CIRCLR_FROG_COUNT):
+            circle_frog = CircleFrog(
+                "images/frog/frog9.png", SPRITE_SCALING_FROG)
+            circle_frog.circle_center_x = random.randrange(SCREEN_WIDTH)
+            circle_frog.circle_center_y = random.randrange(SCREEN_HEIGHT)
+            circle_frog.circle_radius = random.randrange(10, 200)
+            circle_frog.circle_angle = random.random() * 2 * math.pi
+            self.frog_list.append(circle_frog)
 
     def on_draw(self):
         """
@@ -294,7 +293,7 @@ class MyGame(arcade.Window):
 
         # Call update to move the sprite
         for frog in self.frog_list:
-            if type(frog) is BouncingFrog:
+            if type(frog) is BouncingFrog or type(frog) is CircleFrog:
                 frog.update()
         # If using a physics engine, call update on it instead of the sprite
         # list.

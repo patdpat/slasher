@@ -10,7 +10,7 @@ BOUNCING_FROG_COUNT = 10
 FROG_SPEED = 0.5
 
 SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_HEIGHT = 800
 SCREEN_TITLE = "GU MAI AOW LEAW AI SU"
 
 MOVEMENT_SPEED = 5
@@ -18,9 +18,8 @@ SPRITE_SPEED = 0.5
 
 
 class BouncingFrog(arcade.Sprite):
-    "
+
     # This class represent frog that bounce around
-    "
 
     def __init__(self, filename, sprite_scaling):
 
@@ -77,3 +76,28 @@ class Frog(arcade.Sprite):
             # calculate angle of attack
             self.change_x = math.cos(angle) * FROG_SPEED
             self.change_y = math.sin(angle) * FROG_SPEED
+
+
+class CircleFrog(arcade.Sprite):
+
+    def __init__(self, filename, sprite_scaling):
+
+        super().__init__(filename, sprite_scaling)
+
+        self.circle_angle = 0
+
+        self.circle_radius = 0
+
+        self.circle_speed = 0.008
+
+        self.circle_center_x = 0
+        self.circle_center_y = 0
+
+    def update(self):
+
+        self.center_x = self.circle_radius * math.sin(self.circle_angle) \
+            + self.circle_center_x
+        self.center_y = self.circle_radius * math.cos(self.circle_angle) \
+            + self.circle_center_y
+
+        self.circle_angle += self.circle_speed
