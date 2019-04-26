@@ -7,7 +7,8 @@ from go import *
 
 SPRITE_SCALING = 0.1
 SPRITE_SCALING_FROG = 0.3
-FROG_COUNT = 40
+FROG_COUNT = 30
+BOUNCING_FROG_COUNT = 10
 FROG_SPEED = 0.5
 
 SCREEN_WIDTH = 800
@@ -19,7 +20,6 @@ SPRITE_SPEED = 0.5
 
 
 def make_star_field(star_count):
-    """ Make a bunch of circles for stars. """
 
     shape_list = arcade.ShapeElementList()
 
@@ -29,28 +29,27 @@ def make_star_field(star_count):
         radius = random.randrange(1, 4)
         brightness = random.randrange(127, 256)
         color = (brightness, brightness, brightness)
-        shape = arcade.create_ellipse_filled(x, y, radius, radius, color, num_segments=8)
+        shape = arcade.create_ellipse_filled(
+            x, y, radius, radius, color, num_segments=8)
         shape_list.append(shape)
 
     return shape_list
 
 
 def make_skyline(width, skyline_height, skyline_color,
-                 gap_chance = 0.70, window_chance=0.30, light_on_chance=0.5,
+                 gap_chance=0.70, window_chance=0.30, light_on_chance=0.5,
                  window_color=(255, 255, 200), window_margin=3, window_gap=2,
                  cap_chance=0.20):
-    """ Make a skyline """
 
     shape_list = arcade.ShapeElementList()
 
-    # Add the "base" that we build the buildings on
-    shape = arcade.create_rectangle_filled(width / 2, skyline_height / 2, width, skyline_height, skyline_color)
+    shape = arcade.create_rectangle_filled(
+        width / 2, skyline_height / 2, width, skyline_height, skyline_color)
     shape_list.append(shape)
 
     building_center_x = 0
     while building_center_x < width:
 
-        # Is there a gap between the buildings?
         if random.random() < gap_chance:
             gap_width = random.randrange(10, 50)
         else:
@@ -75,29 +74,29 @@ def make_skyline(width, skyline_height, skyline_color,
             y1 = y2 = building_center_y + building_height / 2
             y3 = y1 + building_width / 2
 
-            shape = arcade.create_polygon([[x1, y1], [x2, y2], [x3, y3]], skyline_color)
+            shape = arcade.create_polygon(
+                [[x1, y1], [x2, y2], [x3, y3]], skyline_color)
             shape_list.append(shape)
 
-        # See if we should have some windows
         if random.random() < window_chance:
-            # Yes windows! How many windows?
+
             window_rows = random.randrange(10, 15)
             window_columns = random.randrange(1, 7)
 
-            # Based on that, how big should they be?
             window_height = (building_height - window_margin * 2) / window_rows
-            window_width = (building_width - window_margin * 2 - window_gap * (window_columns - 1)) / window_columns
+            window_width = (building_width - window_margin * 2 -
+                            window_gap * (window_columns - 1)) / window_columns
 
-            # Find the bottom left of the building so we can start adding widows
             building_base_y = building_center_y - building_height / 2
             building_left_x = building_center_x - building_width / 2
 
-            # Loop through each window
             for row in range(window_rows):
                 for column in range(window_columns):
                     if random.random() < light_on_chance:
                         window_y = building_base_y + row * window_height + window_height / 2
-                        window_x = building_left_x + column * (window_width + window_gap) + window_width / 2 + window_margin
+                        window_x = building_left_x + column * \
+                            (window_width + window_gap) + \
+                            window_width / 2 + window_margin
                         shape = arcade.create_rectangle_filled(window_x, window_y,
                                                                window_width, window_height * 0.8, window_color)
                         shape_list.append(shape)
@@ -106,65 +105,24 @@ def make_skyline(width, skyline_height, skyline_color,
 
     return shape_list
 
+
 class Timer():
     def __init__(self):
         from time import perf_counter as time
         self.time = time
         self.start_time = self.time()
-    
+
     def current_time(self):
         return self.time() - self.start_time
-    
+
     def reset(self):
         self.start_time = self.time()
-    
+
     def set_time_limit(self, new_time):
         self.time_limit = new_time
 
     def get_remaining_time(self):
         self.time_limit - self.current_time()
-
-class Frog(arcade.Sprite):
-    """
-    This class represents the coins on our screen. It is a child class of
-    the arcade library's "Sprite" class.
-    """
-
-    def follow_sprite(self, player_sprite):
-        """
-        This function will move the current sprite towards whatever
-        other sprite is specified as a parameter.
-
-        We use the 'min' function here to get the sprite to line up with
-        the target sprite, and not jump around if the sprite is not off
-        an exact multiple of SPRITE_SPEED.
-        """
-
-        self.center_x += self.change_x
-        self.center_y += self.change_y
-
-        # Random 1 in 100 chance that we'll change from our old direction and
-        # then re-aim toward the player
-        if random.randrange(100) == 0:
-            start_x = self.center_x
-            start_y = self.center_y
-
-            # Get the destination location for the bullet
-            dest_x = player_sprite.center_x
-            dest_y = player_sprite.center_y
-
-            # Do math to calculate how to get the bullet to the destination.
-            # Calculation the angle in radians between the start points
-            # and end points. This is the angle the bullet will travel.
-            x_diff = dest_x - start_x
-            y_diff = dest_y - start_y
-            angle = math.atan2(y_diff, x_diff)
-
-            # Taking into account the angle, calculate our change_x
-            # and change_y. Velocity is how fast the bullet travels.
-            self.change_x = math.cos(angle) * FROG_SPEED
-            self.change_y = math.sin(angle) * FROG_SPEED
-
 
 
 class Player(arcade.Sprite):
@@ -226,7 +184,6 @@ class MyGame(arcade.Window):
         # Set the background color
         arcade.set_background_color(arcade.color.BLACK)
 
-
     def setup(self):
         """ Set up the game and initialize the variables. """
 
@@ -237,7 +194,6 @@ class MyGame(arcade.Window):
         # Score
         self.score = 0
 
-
         # Set up the player
         self.player_sprite = Player("images/character.png", SPRITE_SCALING)
         self.player_sprite.center_x = 50
@@ -247,7 +203,7 @@ class MyGame(arcade.Window):
         for i in range(FROG_COUNT):
 
             # Create the coin instance
-            frog_face = random.randint(1,8)
+            frog_face = random.randint(1, 8)
             if frog_face == 1:
                 frog = Frog("images/frog/frog1.png", SPRITE_SCALING_FROG)
             if frog_face == 2:
@@ -261,13 +217,29 @@ class MyGame(arcade.Window):
             if frog_face == 6:
                 frog = Frog("images/frog/frog6.png", SPRITE_SCALING_FROG)
             if frog_face == 7:
-                frog = Frog("images/frog/frog7.png", SPRITE_SCALING_FROG   )
+                frog = Frog("images/frog/frog7.png", SPRITE_SCALING_FROG)
             # Position the coin
             frog.center_x = random.randrange(SCREEN_WIDTH)
             frog.center_y = random.randrange(SCREEN_HEIGHT)
-
             # Add the coin to the lists
             self.frog_list.append(frog)
+
+        for i in range(BOUNCING_FROG_COUNT):
+
+            # Create the coin instance
+            # Coin image from kenney.nl
+            bouncing_frog = BouncingFrog(
+                "images/frog/frog8.png", SPRITE_SCALING_FROG)
+
+            # Position the coin
+            bouncing_frog.center_x = random.randrange(SCREEN_WIDTH)
+            bouncing_frog.center_y = random.randrange(SCREEN_HEIGHT)
+            bouncing_frog.change_x = random.randrange(-3, 4)
+            bouncing_frog.change_y = random.randrange(-3, 4)
+
+            # Add the coin to the lists
+            self.frog_list.append(bouncing_frog)
+
     def on_draw(self):
         """
         Render the screen.
@@ -288,15 +260,16 @@ class MyGame(arcade.Window):
         # Put the text on the screen.
         output = f"Score: {self.score}"
         arcade.draw_text(output, 10, 20, arcade.color.WHITE, 14)
-        
 
     def update(self, delta_time):
         """ Movement and game logic """
         for frog in self.frog_list:
-            frog.follow_sprite(self.player_sprite)
+            if type(frog) is Frog:
+                frog.follow_sprite(self.player_sprite)
 
         # Generate a list of all sprites that collided with the player.
-        hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.frog_list)
+        hit_list = arcade.check_for_collision_with_list(
+            self.player_sprite, self.frog_list)
 
         # Loop through each colliding sprite, remove it, and add to the score.
         for frog in hit_list:
@@ -320,6 +293,9 @@ class MyGame(arcade.Window):
             self.player_sprite.change_x = MOVEMENT_SPEED
 
         # Call update to move the sprite
+        for frog in self.frog_list:
+            if type(frog) is BouncingFrog:
+                frog.update()
         # If using a physics engine, call update on it instead of the sprite
         # list.
         self.player_list.update()
