@@ -10,7 +10,7 @@ SPRITE_SCALING_FROG = 0.3
 
 FROG_COUNT = 28
 BOUNCING_FROG_COUNT = 8
-CIRCLR_FROG_COUNT = 4
+CIRCLE_FROG_COUNT = 4
 FROG_SPEED = 0.5
 
 SCREEN_WIDTH = 800
@@ -203,7 +203,7 @@ class MyGame(arcade.Window):
         self.player_list.append(self.player_sprite)
 
         for i in range(FROG_COUNT):
-            frog_face = random.randint(1, 8)
+            frog_face = random.randint(1, 7)
             if frog_face == 1:
                 frog = Frog("images/frog/frog1.png", SPRITE_SCALING_FROG)
             if frog_face == 2:
@@ -230,7 +230,7 @@ class MyGame(arcade.Window):
             bouncing_frog.change_x = random.randrange(-3, 4)
             bouncing_frog.change_y = random.randrange(-3, 4)
             self.frog_list.append(bouncing_frog)
-        for i in range(CIRCLR_FROG_COUNT):
+        for i in range(CIRCLE_FROG_COUNT):
             circle_frog = CircleFrog(
                 "images/frog/frog9.png", SPRITE_SCALING_FROG)
             circle_frog.circle_center_x = random.randrange(SCREEN_WIDTH)
