@@ -90,14 +90,14 @@ class MyGame(arcade.Window):
         self.player_list = arcade.SpriteList()
         self.frog_list = arcade.SpriteList()
         self.heart_list = arcade.SpriteList()
-        # Score
+        # Collection variable
         self.score = 0
-        # Set up the player
+        # Set up the player part
         self.player_sprite = Player("images/character.png", SPRITE_SCALING)
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
-
+        # Create frog part
         heart = Heart("images/heart.png", SPRITE_SCALING_HEART)
         heart.circle_center_x = random.randrange(SCREEN_WIDTH)
         heart.circle_center_y = random.randrange(SCREEN_HEIGHT)
@@ -147,14 +147,13 @@ class MyGame(arcade.Window):
         """
         Render the screen.
         """
-
-        # This command has to happen before we start drawing
         arcade.start_render()
 
         # Draw all the sprites.
         self.stars.draw()
         self.skyline1.draw()
         self.skyline2.draw()
+
         self.player_list.draw()
 
         self.frog_list.draw()
@@ -190,7 +189,7 @@ class MyGame(arcade.Window):
         # Calculate speed based on the keys pressed
         self.skyline1.center_x -= 0.5
         self.skyline2.center_x -= 1
-        print(delta_time)
+        # print(delta_time)
         self.player_sprite.change_x = 0
         self.player_sprite.change_y = 0
 
