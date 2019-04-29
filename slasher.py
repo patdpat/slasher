@@ -4,6 +4,7 @@ import random
 import math
 import time
 from models import *
+from background import *
 
 SPRITE_SCALING = 0.1
 SPRITE_SCALING_FROG = 0.3
@@ -17,93 +18,6 @@ SCREEN_TITLE = "SUCK MY DICK"
 
 MOVEMENT_SPEED = 5
 SPRITE_SPEED = 0.5
-
-
-def make_star_field(star_count):
-
-    shape_list = arcade.ShapeElementList()
-
-    for star_no in range(star_count):
-        x = random.randrange(SCREEN_WIDTH)
-        y = random.randrange(SCREEN_HEIGHT)
-        radius = random.randrange(1, 4)
-        brightness = random.randrange(127, 256)
-        color = (brightness, brightness, brightness)
-        shape = arcade.create_ellipse_filled(
-            x, y, radius, radius, color, num_segments=8)
-        shape_list.append(shape)
-
-    return shape_list
-
-
-def make_skyline(width, skyline_height, skyline_color,
-                 gap_chance=0.70, window_chance=0.30, light_on_chance=0.5,
-                 window_color=(255, 255, 200), window_margin=3, window_gap=2,
-                 cap_chance=0.20):
-
-    shape_list = arcade.ShapeElementList()
-
-    shape = arcade.create_rectangle_filled(
-        width / 2, skyline_height / 2, width, skyline_height, skyline_color)
-    shape_list.append(shape)
-
-    building_center_x = 0
-    while building_center_x < width:
-
-        if random.random() < gap_chance:
-            gap_width = random.randrange(10, 50)
-        else:
-            gap_width = 0
-
-        # Figure out location and size of building
-        building_width = random.randrange(20, 70)
-        building_height = random.randrange(40, 150)
-        building_center_x += gap_width + (building_width / 2)
-        building_center_y = skyline_height + (building_height / 2)
-
-        # Add building to the list
-        shape = arcade.create_rectangle_filled(building_center_x, building_center_y,
-                                               building_width, building_height, skyline_color)
-        shape_list.append(shape)
-
-        if random.random() < cap_chance:
-            x1 = building_center_x - building_width / 2
-            x2 = building_center_x + building_width / 2
-            x3 = building_center_x
-
-            y1 = y2 = building_center_y + building_height / 2
-            y3 = y1 + building_width / 2
-
-            shape = arcade.create_polygon(
-                [[x1, y1], [x2, y2], [x3, y3]], skyline_color)
-            shape_list.append(shape)
-
-        if random.random() < window_chance:
-
-            window_rows = random.randrange(10, 15)
-            window_columns = random.randrange(1, 7)
-
-            window_height = (building_height - window_margin * 2) / window_rows
-            window_width = (building_width - window_margin * 2 -
-                            window_gap * (window_columns - 1)) / window_columns
-
-            building_base_y = building_center_y - building_height / 2
-            building_left_x = building_center_x - building_width / 2
-
-            for row in range(window_rows):
-                for column in range(window_columns):
-                    if random.random() < light_on_chance:
-                        window_y = building_base_y + row * window_height + window_height / 2
-                        window_x = building_left_x + column * \
-                            (window_width + window_gap) + \
-                            window_width / 2 + window_margin
-                        shape = arcade.create_rectangle_filled(window_x, window_y,
-                                                               window_width, window_height * 0.8, window_color)
-                        shape_list.append(shape)
-
-        building_center_x += (building_width / 2)
-
-    return shape_list
 
 
 class Player(arcade.Sprite):
@@ -149,6 +63,7 @@ class MyGame(arcade.Window):
         # Variables that will hold sprite lists
         self.player_list = None
         self.frog_list = None
+        self.heart_list = None
         # Set up the player info
         self.player_sprite = None
 
@@ -174,16 +89,21 @@ class MyGame(arcade.Window):
         # Sprite lists
         self.player_list = arcade.SpriteList()
         self.frog_list = arcade.SpriteList()
-
+        self.heart_list = arcade.SpriteList()
         # Score
         self.score = 0
-        self.time = Timer()
-
         # Set up the player
         self.player_sprite = Player("images/character.png", SPRITE_SCALING)
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
+
+        heart = Heart("images/heart.png", SPRITE_SCALING_FROG)
+        heart.circle_center_x = random.randrange(SCREEN_WIDTH)
+        heart.circle_center_y = random.randrange(SCREEN_HEIGHT)
+        heart.circle_radius = random.randrange(10, 200)
+        heart.circle_angle = random.random() * 2 * math.pi
+        self.heart_list.append(heart)
 
         for i in range(FROG_COUNT):
             frog_face = random.randint(1, 7)
@@ -238,11 +158,11 @@ class MyGame(arcade.Window):
         self.player_list.draw()
 
         self.frog_list.draw()
+        self.heart_list.draw()
         self.player_list.draw()
 
         # Put the text on the screen.
         output = f"Score: {self.score}"
-        timer = f"Timer Remaining: {self.timer}"
         arcade.draw_text(output, 10, 20, arcade.color.WHITE, 14)
 
     def update(self, delta_time):
@@ -250,6 +170,13 @@ class MyGame(arcade.Window):
         for frog in self.frog_list:
             if type(frog) is Frog:
                 frog.follow_sprite(self.player_sprite)
+        # Call update to move the sprite
+        for frog in self.frog_list:
+            if type(frog) is BouncingFrog or type(frog) is CircleFrog:
+                frog.update()
+
+        for heart in self.heart_list:
+            heart.update()
 
         # Generate a list of all sprites that collided with the player.
         hit_list = arcade.check_for_collision_with_list(
@@ -276,10 +203,6 @@ class MyGame(arcade.Window):
         elif self.right_pressed and not self.left_pressed:
             self.player_sprite.change_x = MOVEMENT_SPEED
 
-        # Call update to move the sprite
-        for frog in self.frog_list:
-            if type(frog) is BouncingFrog or type(frog) is CircleFrog:
-                frog.update()
         # If using a physics engine, call update on it instead of the sprite
         # list.
         self.player_list.update()
