@@ -161,8 +161,10 @@ class MyGame(arcade.Window):
         self.player_list.draw()
 
         # Put the text on the screen.
-        output = f"Score: {self.score}"
-        arcade.draw_text(output, 10, 20, arcade.color.WHITE, 14)
+        # output = f"Level: {self.level}"
+        # arcade.draw_text(output, 10, 35, arcade.color.WHITE, 15)
+        output = f"YOU ALREADY HIT {self.score} FROGS"
+        arcade.draw_text(output, 10, 20, arcade.color.RED, 18)
 
     def update(self, delta_time):
         """ Movement and game logic """
