@@ -3,7 +3,7 @@ import os
 import random
 import math
 import time
-from go import *
+from models import *
 
 SPRITE_SCALING = 0.1
 SPRITE_SCALING_FROG = 0.3
@@ -106,25 +106,6 @@ def make_skyline(width, skyline_height, skyline_color,
     return shape_list
 
 
-class Timer():
-    def __init__(self):
-        from time import perf_counter as time
-        self.time = time
-        self.start_time = self.time()
-
-    def current_time(self):
-        return self.time() - self.start_time
-
-    def reset(self):
-        self.start_time = self.time()
-
-    def set_time_limit(self, new_time):
-        self.time_limit = new_time
-
-    def get_remaining_time(self):
-        self.time_limit - self.current_time()
-
-
 class Player(arcade.Sprite):
 
     def update(self):
@@ -177,7 +158,6 @@ class MyGame(arcade.Window):
         self.up_pressed = False
         self.down_pressed = False
         self.score = 0
-        self.timer = Timer()
 
         # Don't show the mouse cursor
         self.set_mouse_visible(False)
