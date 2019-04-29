@@ -6,11 +6,11 @@ import time
 from models import *
 from background import *
 
-SPRITE_SCALING = 0.1
+SPRITE_SCALING = 0.25
 SPRITE_SCALING_FROG = 0.3
+SPRITE_SCALING_HEART = 0.25
 
-
-FROG_SPEED = 0.5
+FROG_SPEED = 0.75
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
@@ -82,9 +82,9 @@ class MyGame(arcade.Window):
 
     def setup(self):
         """ Set up the game and initialize the variables. """
-        FROG_COUNT = 28
-        BOUNCING_FROG_COUNT = 8
-        CIRCLE_FROG_COUNT = 4
+        FROG_COUNT = 58
+        BOUNCING_FROG_COUNT = 18
+        CIRCLE_FROG_COUNT = 44
 
         # Sprite lists
         self.player_list = arcade.SpriteList()
@@ -98,7 +98,7 @@ class MyGame(arcade.Window):
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
 
-        heart = Heart("images/heart.png", SPRITE_SCALING_FROG)
+        heart = Heart("images/heart.png", SPRITE_SCALING_HEART)
         heart.circle_center_x = random.randrange(SCREEN_WIDTH)
         heart.circle_center_y = random.randrange(SCREEN_HEIGHT)
         heart.circle_radius = random.randrange(10, 200)
