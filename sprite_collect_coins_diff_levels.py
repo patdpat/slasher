@@ -81,7 +81,7 @@ class MyGame(arcade.Window):
         for i in range(20):
 
             # Create the coin instance
-            coin = arcade.Sprite("images/coin_01.png", SPRITE_SCALING / 3)
+            coin = arcade.Sprite("images/frog/frog1.png", SPRITE_SCALING / 3)
 
             # Position the coin
             coin.center_x = random.randrange(SCREEN_WIDTH)
@@ -94,7 +94,7 @@ class MyGame(arcade.Window):
         for i in range(30):
 
             # Create the coin instance
-            coin = FallingCoin("images/gold_1.png", SPRITE_SCALING / 2)
+            coin = FallingCoin("images/frog/frog2.png", SPRITE_SCALING / 2)
 
             # Position the coin
             coin.center_x = random.randrange(SCREEN_WIDTH)
@@ -107,7 +107,7 @@ class MyGame(arcade.Window):
         for i in range(30):
 
             # Create the coin instance
-            coin = RisingCoin("images/gold_1.png", SPRITE_SCALING / 2)
+            coin = RisingCoin("images/frog/frog3.png", SPRITE_SCALING / 2)
 
             # Position the coin
             coin.center_x = random.randrange(SCREEN_WIDTH)

@@ -15,6 +15,32 @@ SCREEN_TITLE = "GU MAI AOW LEAW AI SU"
 
 MOVEMENT_SPEED = 5
 SPRITE_SPEED = 0.5
+# TODO NO DEATH IF YOU HIT MORE FROG NEXT ROUND YOU GET MORE FRONG AS PENALTY
+
+
+class Heart(arcade.Sprite):
+
+    def __init__(self, filename, sprite_scaling):
+
+        super().__init__(filename, sprite_scaling)
+
+        self.circle_angle = 0
+
+        self.circle_radius = 0
+
+        self.circle_speed = 0.008
+
+        self.circle_center_x = 0
+        self.circle_center_y = 0
+
+    def update(self):
+
+        self.center_x = self.circle_radius * math.sin(self.circle_angle) \
+            + self.circle_center_x
+        self.center_y = self.circle_radius * math.cos(self.circle_angle) \
+            + self.circle_center_y
+
+        self.circle_angle += self.circle_speed
 
 
 class BouncingFrog(arcade.Sprite):

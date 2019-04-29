@@ -8,9 +8,7 @@ from go import *
 SPRITE_SCALING = 0.1
 SPRITE_SCALING_FROG = 0.3
 
-FROG_COUNT = 28
-BOUNCING_FROG_COUNT = 8
-CIRCLE_FROG_COUNT = 4
+
 FROG_SPEED = 0.5
 
 SCREEN_WIDTH = 800
@@ -179,6 +177,7 @@ class MyGame(arcade.Window):
         self.up_pressed = False
         self.down_pressed = False
         self.score = 0
+        self.timer = Timer()
 
         # Don't show the mouse cursor
         self.set_mouse_visible(False)
@@ -188,6 +187,9 @@ class MyGame(arcade.Window):
 
     def setup(self):
         """ Set up the game and initialize the variables. """
+        FROG_COUNT = 28
+        BOUNCING_FROG_COUNT = 8
+        CIRCLE_FROG_COUNT = 4
 
         # Sprite lists
         self.player_list = arcade.SpriteList()
@@ -195,6 +197,7 @@ class MyGame(arcade.Window):
 
         # Score
         self.score = 0
+        self.time = Timer()
 
         # Set up the player
         self.player_sprite = Player("images/character.png", SPRITE_SCALING)
@@ -230,6 +233,7 @@ class MyGame(arcade.Window):
             bouncing_frog.change_x = random.randrange(-3, 4)
             bouncing_frog.change_y = random.randrange(-3, 4)
             self.frog_list.append(bouncing_frog)
+
         for i in range(CIRCLE_FROG_COUNT):
             circle_frog = CircleFrog(
                 "images/frog/frog9.png", SPRITE_SCALING_FROG)
@@ -258,6 +262,7 @@ class MyGame(arcade.Window):
 
         # Put the text on the screen.
         output = f"Score: {self.score}"
+        timer = f"Timer Remaining: {self.timer}"
         arcade.draw_text(output, 10, 20, arcade.color.WHITE, 14)
 
     def update(self, delta_time):
