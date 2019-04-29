@@ -165,6 +165,8 @@ class MyGame(arcade.Window):
         # arcade.draw_text(output, 10, 35, arcade.color.WHITE, 15)
         output = f"YOU ALREADY HIT {self.score} FROGS"
         arcade.draw_text(output, 10, 20, arcade.color.RED, 18)
+        output = f"NUMBER OF CURRENT FROG: {len(self.frog_list)}"
+        arcade.draw_text(output, 10, 35, arcade.color.WHITE, 15)
 
     def update(self, delta_time):
         """ Movement and game logic """
@@ -182,11 +184,17 @@ class MyGame(arcade.Window):
         # Generate a list of all sprites that collided with the player.
         hit_list = arcade.check_for_collision_with_list(
             self.player_sprite, self.frog_list)
-
+        next_list = arcade.check_for_collision_with_list(
+            self.player_sprite, self.heart_list)
         # Loop through each colliding sprite, remove it, and add to the score.
         for frog in hit_list:
             frog.kill()
             self.score += 1
+
+        for heart in next_list:
+            heart.kill()
+            for i in range(5):
+                self.frog_list[i].kill()
 
         # Calculate speed based on the keys pressed
         self.skyline1.center_x -= 0.5
