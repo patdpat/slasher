@@ -3,7 +3,7 @@ import os
 import random
 import math
 import time
-from go import *
+from models import *
 
 SPRITE_SCALING = 0.1
 SPRITE_SCALING_FROG = 0.3
