@@ -77,9 +77,9 @@ class MyGame(arcade.Window):
 
     def setup(self):
         """ Set up the game and initialize the variables. """
-        FROG_COUNT = 70
-        BOUNCING_FROG_COUNT = 23
-        CIRCLE_FROG_COUNT = 27
+        FROG_COUNT = 75
+        BOUNCING_FROG_COUNT = 25
+        CIRCLE_FROG_COUNT = 30
 
         # Sprite lists
         self.player_list = arcade.SpriteList()
@@ -153,6 +153,8 @@ class MyGame(arcade.Window):
         """
         output = "You  Wins "
         arcade.draw_text(output, 240, 600, arcade.color.WHITE, 54)
+        output = "NUMBER OF FROG IS LESS THAN 5"
+        arcade.draw_text(output, 80, 500, arcade.color.WHITE, 34)
         output = f"THIS ROUND YOU HITS {self.score} FROGS"
         arcade.draw_text(output, 70, 400, arcade.color.RED, 34)
         output = "Click to restart"
