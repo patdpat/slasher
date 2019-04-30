@@ -5,7 +5,10 @@ import math
 import time
 from models import *
 from background import *
-
+INSTRUCTIONS_PAGE_0 = 0
+INSTRUCTIONS_PAGE_1 = 1
+GAME_RUNNING = 2
+GAME_OVER = 3
 SPRITE_SCALING = 0.25
 SPRITE_SCALING_FROG = 0.3
 SPRITE_SCALING_HEART = 0.25
@@ -42,6 +45,13 @@ class MyGame(arcade.Window):
         # as mentioned at the top of this program.
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
+        self.current_state = INSTRUCTIONS_PAGE_0
+        self.instructions = []
+        texture = arcade.load_texture("images/instructions_0.png")
+        self.instructions.append(texture)
+
+        texture = arcade.load_texture("images/instructions_1.png")
+        self.instructions.append(texture)
 
         # Variables that will hold sprite lists
         self.player_list = None
@@ -58,7 +68,7 @@ class MyGame(arcade.Window):
         self.score = 0
 
         # Don't show the mouse cursor
-        self.set_mouse_visible(False)
+        self.set_mouse_visible(True)
 
         # Set the background color
         arcade.set_background_color(arcade.color.BLACK)
@@ -126,6 +136,25 @@ class MyGame(arcade.Window):
             circle_frog.circle_angle = random.random() * 2 * math.pi
             self.frog_list.append(circle_frog)
 
+    def draw_instructions_page(self, page_number):
+        """
+        Draw an instruction page. Load the page as an image.
+        """
+        page_texture = self.instructions[page_number]
+        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
+                                      page_texture.width,
+                                      page_texture.height, page_texture, 0)
+
+    def draw_game_over(self):
+        """
+        Draw "Game over" across the screen.
+        """
+        output = "Game Over"
+        arcade.draw_text(output, 240, 400, arcade.color.WHITE, 54)
+
+        output = "Click to restart"
+        arcade.draw_text(output, 310, 300, arcade.color.WHITE, 24)
+
     def add_frog(self):
         for i in range(6):
             frog_face = random.randint(1, 7)
@@ -173,7 +202,7 @@ class MyGame(arcade.Window):
         heart.circle_angle = random.random() * 2 * math.pi
         self.heart_list.append(heart)
 
-    def on_draw(self):
+    def draw_game(self):
         """
         Render the screen.
         """
@@ -200,55 +229,81 @@ class MyGame(arcade.Window):
         output = f"!!!WARNING!!! EVERY 5 FROG YOU HIT YOU'LL GET 10 MORE"
         arcade.draw_text(output, 10, 20, arcade.color.RED, 18)
 
+    def on_draw(self):
+        """
+        Render the screen.
+        """
+
+        # This command has to happen before we start drawing
+        arcade.start_render()
+
+        if self.current_state == INSTRUCTIONS_PAGE_0:
+            self.draw_instructions_page(0)
+
+        elif self.current_state == INSTRUCTIONS_PAGE_1:
+            self.draw_instructions_page(1)
+
+        elif self.current_state == GAME_RUNNING:
+            self.draw_game()
+
+        else:
+            self.draw_game()
+            self.draw_game_over()
+
     def update(self, delta_time):
-        """ Movement and game logic """
-        for frog in self.frog_list:
-            if type(frog) is Frog:
-                frog.follow_sprite(self.player_sprite)
-        # Call update to move the sprite
-        for frog in self.frog_list:
-            if type(frog) is BouncingFrog or type(frog) is CircleFrog:
-                frog.update()
+        # Only move and do things if the game is running.
+        if self.current_state == GAME_RUNNING:
+            # Call update on all sprites (The sprites don't do much in this
+            # example though.)
 
-        for heart in self.heart_list:
-            heart.update()
+            """ Movement and game logic """
+            for frog in self.frog_list:
+                if type(frog) is Frog:
+                    frog.follow_sprite(self.player_sprite)
+            # Call update to move the sprite
+            for frog in self.frog_list:
+                if type(frog) is BouncingFrog or type(frog) is CircleFrog:
+                    frog.update()
 
-        # Generate a list of all sprites that collided with the player.
-        hit_list = arcade.check_for_collision_with_list(
-            self.player_sprite, self.frog_list)
-        next_list = arcade.check_for_collision_with_list(
-            self.player_sprite, self.heart_list)
-        # Loop through each colliding sprite, remove it, and add to the score.
-        for frog in hit_list:
-            frog.kill()
-            self.score += 1
-# TODO
-        for heart in next_list:
-            heart.kill()
-            for i in range(5):
-                target = random.randint(1, len(self.frog_list)-1)
-                self.frog_list[target].kill()
-            self.add_heart()
+            for heart in self.heart_list:
+                heart.update()
 
-        # Calculate speed based on the keys pressed
-        self.skyline1.center_x -= 0.5
-        self.skyline2.center_x -= 1
-        # print(delta_time)
-        self.player_sprite.change_x = 0
-        self.player_sprite.change_y = 0
+            # Generate a list of all sprites that collided with the player.
+            hit_list = arcade.check_for_collision_with_list(
+                self.player_sprite, self.frog_list)
+            next_list = arcade.check_for_collision_with_list(
+                self.player_sprite, self.heart_list)
+            # Loop through each colliding sprite, remove it, and add to the score.
+            for frog in hit_list:
+                frog.kill()
+                self.score += 1
+    # TODO
+            for heart in next_list:
+                heart.kill()
+                for i in range(5):
+                    target = random.randint(1, len(self.frog_list)-1)
+                    self.frog_list[target].kill()
+                self.add_heart()
 
-        if self.up_pressed and not self.down_pressed:
-            self.player_sprite.change_y = MOVEMENT_SPEED
-        elif self.down_pressed and not self.up_pressed:
-            self.player_sprite.change_y = -MOVEMENT_SPEED
-        if self.left_pressed and not self.right_pressed:
-            self.player_sprite.change_x = -MOVEMENT_SPEED
-        elif self.right_pressed and not self.left_pressed:
-            self.player_sprite.change_x = MOVEMENT_SPEED
+            # Calculate speed based on the keys pressed
+            self.skyline1.center_x -= 0.5
+            self.skyline2.center_x -= 1
+            # print(delta_time)
+            self.player_sprite.change_x = 0
+            self.player_sprite.change_y = 0
 
-        # If using a physics engine, call update on it instead of the sprite
-        # list.
-        self.player_list.update()
+            if self.up_pressed and not self.down_pressed:
+                self.player_sprite.change_y = MOVEMENT_SPEED
+            elif self.down_pressed and not self.up_pressed:
+                self.player_sprite.change_y = -MOVEMENT_SPEED
+            if self.left_pressed and not self.right_pressed:
+                self.player_sprite.change_x = -MOVEMENT_SPEED
+            elif self.right_pressed and not self.left_pressed:
+                self.player_sprite.change_x = MOVEMENT_SPEED
+
+            # If using a physics engine, call update on it instead of the sprite
+            # list.
+            self.player_list.update()
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
@@ -273,6 +328,24 @@ class MyGame(arcade.Window):
             self.left_pressed = False
         elif key == arcade.key.RIGHT:
             self.right_pressed = False
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        """
+        Called when the user presses a mouse button.
+        """
+
+        # Change states as needed.
+        if self.current_state == INSTRUCTIONS_PAGE_0:
+            # Next page of instructions.
+            self.current_state = INSTRUCTIONS_PAGE_1
+        elif self.current_state == INSTRUCTIONS_PAGE_1:
+            # Start the game
+            self.setup()
+            self.current_state = GAME_RUNNING
+        elif self.current_state == GAME_OVER:
+            # Restart the game.
+            self.setup()
+            self.current_state = GAME_RUNNING
 
 
 def main():
