@@ -9,6 +9,7 @@ INSTRUCTIONS_PAGE_0 = 0
 INSTRUCTIONS_PAGE_1 = 1
 GAME_RUNNING = 2
 GAME_OVER = 3
+GAME_WIN = 4
 SPRITE_SCALING = 0.25
 SPRITE_SCALING_FROG = 0.3
 SPRITE_SCALING_HEART = 0.25
@@ -146,6 +147,17 @@ class MyGame(arcade.Window):
                                       page_texture.width,
                                       page_texture.height, page_texture, 0)
 
+    def draw_game_win(self):
+        """
+        Draw "Game over" across the screen.
+        """
+        output = "You  Wins "
+        arcade.draw_text(output, 240, 600, arcade.color.WHITE, 54)
+        output = f"THIS ROUND YOU HITS {self.score} FROGS"
+        arcade.draw_text(output, 70, 400, arcade.color.RED, 34)
+        output = "Click to restart"
+        arcade.draw_text(output, 310, 200, arcade.color.WHITE, 24)
+
     def draw_game_over(self):
         """
         Draw "Game over" across the screen.
@@ -251,7 +263,8 @@ class MyGame(arcade.Window):
 
         elif self.current_state == GAME_RUNNING:
             self.draw_game()
-
+        elif self.current_state == GAME_WIN:
+            self.draw_game_win()
         else:
             self.draw_game_over()
 
@@ -297,6 +310,9 @@ class MyGame(arcade.Window):
 
             if len(self.frog_list) > 200:
                 self.current_state = GAME_OVER
+
+            if len(self.frog_list) < 5:
+                self.current_state = GAME_WIN
 
             # Calculate speed based on the keys pressed
             self.skyline1.center_x -= 0.5
@@ -354,6 +370,10 @@ class MyGame(arcade.Window):
             self.setup()
             self.current_state = GAME_RUNNING
         elif self.current_state == GAME_OVER:
+            # Restart the game.
+            self.setup()
+            self.current_state = GAME_RUNNING
+        elif self.current_state == GAME_WIN:
             # Restart the game.
             self.setup()
             self.current_state = GAME_RUNNING
