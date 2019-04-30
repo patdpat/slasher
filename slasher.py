@@ -254,7 +254,6 @@ class MyGame(arcade.Window):
         # Only move and do things if the game is running.
         if self.current_state == GAME_RUNNING:
             # Call update on all sprites (The sprites don't do much in this
-            # example though.)
 
             """ Movement and game logic """
             for frog in self.frog_list:
@@ -273,11 +272,11 @@ class MyGame(arcade.Window):
                 self.player_sprite, self.frog_list)
             next_list = arcade.check_for_collision_with_list(
                 self.player_sprite, self.heart_list)
-            # Loop through each colliding sprite, remove it, and add to the score.
+            # Loop through each colliding sprite, remove it, and add to the hit.
             for frog in hit_list:
                 frog.kill()
                 self.score += 1
-    # TODO
+    # TODO  #Game Logic and ETC.
             for heart in next_list:
                 heart.kill()
                 for i in range(5):
@@ -301,8 +300,6 @@ class MyGame(arcade.Window):
             elif self.right_pressed and not self.left_pressed:
                 self.player_sprite.change_x = MOVEMENT_SPEED
 
-            # If using a physics engine, call update on it instead of the sprite
-            # list.
             self.player_list.update()
 
     def on_key_press(self, key, modifiers):
