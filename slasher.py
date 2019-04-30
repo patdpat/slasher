@@ -82,9 +82,9 @@ class MyGame(arcade.Window):
 
     def setup(self):
         """ Set up the game and initialize the variables. """
-        FROG_COUNT = 58
-        BOUNCING_FROG_COUNT = 18
-        CIRCLE_FROG_COUNT = 44
+        FROG_COUNT = 70
+        BOUNCING_FROG_COUNT = 23
+        CIRCLE_FROG_COUNT = 27
 
         # Sprite lists
         self.player_list = arcade.SpriteList()
@@ -143,6 +143,53 @@ class MyGame(arcade.Window):
             circle_frog.circle_angle = random.random() * 2 * math.pi
             self.frog_list.append(circle_frog)
 
+    def add_frog(self):
+        for i in range(6):
+            frog_face = random.randint(1, 7)
+            if frog_face == 1:
+                frog = Frog("images/frog/frog1.png", SPRITE_SCALING_FROG)
+            if frog_face == 2:
+                frog = Frog("images/frog/frog2.png", SPRITE_SCALING_FROG)
+            if frog_face == 3:
+                frog = Frog("images/frog/frog3.png", SPRITE_SCALING_FROG)
+            if frog_face == 4:
+                frog = Frog("images/frog/frog4.png", SPRITE_SCALING_FROG)
+            if frog_face == 5:
+                frog = Frog("images/frog/frog5.png", SPRITE_SCALING_FROG)
+            if frog_face == 6:
+                frog = Frog("images/frog/frog6.png", SPRITE_SCALING_FROG)
+            if frog_face == 7:
+                frog = Frog("images/frog/frog7.png", SPRITE_SCALING_FROG)
+            frog.center_x = random.randrange(SCREEN_WIDTH)
+            frog.center_y = random.randrange(SCREEN_HEIGHT)
+            self.frog_list.append(frog)
+
+        for i in range(2):
+            bouncing_frog = BouncingFrog(
+                "images/frog/frog8.png", SPRITE_SCALING_FROG)
+            bouncing_frog.center_x = random.randrange(SCREEN_WIDTH)
+            bouncing_frog.center_y = random.randrange(SCREEN_HEIGHT)
+            bouncing_frog.change_x = random.randrange(-3, 4)
+            bouncing_frog.change_y = random.randrange(-3, 4)
+            self.frog_list.append(bouncing_frog)
+
+        for i in range(2):
+            circle_frog = CircleFrog(
+                "images/frog/frog9.png", SPRITE_SCALING_FROG)
+            circle_frog.circle_center_x = random.randrange(SCREEN_WIDTH)
+            circle_frog.circle_center_y = random.randrange(SCREEN_HEIGHT)
+            circle_frog.circle_radius = random.randrange(10, 200)
+            circle_frog.circle_angle = random.random() * 2 * math.pi
+            self.frog_list.append(circle_frog)
+
+    def add_heart(self):
+        heart = Heart("images/heart.png", SPRITE_SCALING_HEART)
+        heart.circle_center_x = random.randrange(SCREEN_WIDTH)
+        heart.circle_center_y = random.randrange(SCREEN_HEIGHT)
+        heart.circle_radius = random.randrange(10, 200)
+        heart.circle_angle = random.random() * 2 * math.pi
+        self.heart_list.append(heart)
+
     def on_draw(self):
         """
         Render the screen.
@@ -163,10 +210,12 @@ class MyGame(arcade.Window):
         # Put the text on the screen.
         # output = f"Level: {self.level}"
         # arcade.draw_text(output, 10, 35, arcade.color.WHITE, 15)
-        output = f"YOU ALREADY HIT {self.score} FROGS"
-        arcade.draw_text(output, 10, 20, arcade.color.RED, 18)
         output = f"NUMBER OF CURRENT FROG: {len(self.frog_list)}"
-        arcade.draw_text(output, 10, 35, arcade.color.WHITE, 15)
+        arcade.draw_text(output, 10, 80, arcade.color.WHITE, 18)
+        output = f"YOU ALREADY HIT    :  {self.score} FROGS "
+        arcade.draw_text(output, 10, 50, arcade.color.RED, 18)
+        output = f"!!!WARNING!!! EVERY 5 FROG YOU HIT YOU'LL GET 10 MORE"
+        arcade.draw_text(output, 10, 20, arcade.color.RED, 18)
 
     def update(self, delta_time):
         """ Movement and game logic """
@@ -191,10 +240,16 @@ class MyGame(arcade.Window):
             frog.kill()
             self.score += 1
 
+
+  
+
+# TODO
         for heart in next_list:
             heart.kill()
             for i in range(5):
-                self.frog_list[i].kill()
+                target = random.randint(1, len(self.frog_list)-1)
+                self.frog_list[target].kill()
+            self.add_heart()
 
         # Calculate speed based on the keys pressed
         self.skyline1.center_x -= 0.5
