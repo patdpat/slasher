@@ -313,7 +313,7 @@ class MyGame(arcade.Window):
             if len(self.frog_list) > 200:
                 self.current_state = GAME_OVER
 
-            if len(self.frog_list) < 5:
+            if len(self.frog_list) <= 5:
                 self.current_state = GAME_WIN
 
             # Calculate speed based on the keys pressed
