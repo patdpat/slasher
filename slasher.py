@@ -59,6 +59,7 @@ class MyGame(arcade.Window):
         self.heart_list = None
         # Set up the player info
         self.player_sprite = None
+        self.should_add = 0
 
         # Track the current state of what key is pressed
         self.left_pressed = False
@@ -149,14 +150,17 @@ class MyGame(arcade.Window):
         """
         Draw "Game over" across the screen.
         """
-        output = "Game Over"
-        arcade.draw_text(output, 240, 400, arcade.color.WHITE, 54)
-
+        output = "Game Over "
+        arcade.draw_text(output, 240, 600, arcade.color.WHITE, 54)
+        output = "NUMBER OF FROG EXCEED 200"
+        arcade.draw_text(output, 110, 500, arcade.color.WHITE, 34)
+        output = f"THIS ROUND YOU HITS {self.score} FROGS"
+        arcade.draw_text(output, 70, 400, arcade.color.RED, 34)
         output = "Click to restart"
-        arcade.draw_text(output, 310, 300, arcade.color.WHITE, 24)
+        arcade.draw_text(output, 310, 200, arcade.color.WHITE, 24)
 
     def add_frog(self):
-        for i in range(6):
+        for i in range(4):
             frog_face = random.randint(1, 7)
             if frog_face == 1:
                 frog = Frog("images/frog/frog1.png", SPRITE_SCALING_FROG)
@@ -176,7 +180,7 @@ class MyGame(arcade.Window):
             frog.center_y = random.randrange(SCREEN_HEIGHT)
             self.frog_list.append(frog)
 
-        for i in range(2):
+        for i in range(1):
             bouncing_frog = BouncingFrog(
                 "images/frog/frog8.png", SPRITE_SCALING_FROG)
             bouncing_frog.center_x = random.randrange(SCREEN_WIDTH)
@@ -185,7 +189,7 @@ class MyGame(arcade.Window):
             bouncing_frog.change_y = random.randrange(-3, 4)
             self.frog_list.append(bouncing_frog)
 
-        for i in range(2):
+        for i in range(1):
             circle_frog = CircleFrog(
                 "images/frog/frog9.png", SPRITE_SCALING_FROG)
             circle_frog.circle_center_x = random.randrange(SCREEN_WIDTH)
@@ -222,12 +226,14 @@ class MyGame(arcade.Window):
         # Put the text on the screen.
         # output = f"Level: {self.level}"
         # arcade.draw_text(output, 10, 35, arcade.color.WHITE, 15)
-        output = f"NUMBER OF CURRENT FROG: {len(self.frog_list)}"
+        output = f"NUMBER OF CURRENT FROG: {len(self.frog_list)} "
+        arcade.draw_text(output, 10, 110, arcade.color.WHITE, 18)
+        output = f"YOU'LL LOSE IF CURRENT FROG EXCEED 200"
         arcade.draw_text(output, 10, 80, arcade.color.WHITE, 18)
         output = f"YOU ALREADY HIT    :  {self.score} FROGS "
         arcade.draw_text(output, 10, 50, arcade.color.RED, 18)
-        output = f"!!!WARNING!!! EVERY 5 FROG YOU HIT YOU'LL GET 10 MORE"
-        arcade.draw_text(output, 10, 20, arcade.color.RED, 18)
+        output = f"EVERY 5 FROGS YOU HIT YOU'LL GET 6 MORE"
+        arcade.draw_text(output, 10, 20, arcade.color.WHITE, 18)
 
     def on_draw(self):
         """
@@ -247,7 +253,6 @@ class MyGame(arcade.Window):
             self.draw_game()
 
         else:
-            self.draw_game()
             self.draw_game_over()
 
     def update(self, delta_time):
@@ -259,6 +264,7 @@ class MyGame(arcade.Window):
             for frog in self.frog_list:
                 if type(frog) is Frog:
                     frog.follow_sprite(self.player_sprite)
+
             # Call update to move the sprite
             for frog in self.frog_list:
                 if type(frog) is BouncingFrog or type(frog) is CircleFrog:
@@ -276,6 +282,7 @@ class MyGame(arcade.Window):
             for frog in hit_list:
                 frog.kill()
                 self.score += 1
+                self.should_add += 1
     # TODO  #Game Logic and ETC.
             for heart in next_list:
                 heart.kill()
@@ -283,6 +290,13 @@ class MyGame(arcade.Window):
                     target = random.randint(1, len(self.frog_list)-1)
                     self.frog_list[target].kill()
                 self.add_heart()
+
+            if self.should_add > 5:
+                self.add_frog()
+                self.should_add -= 5
+
+            if len(self.frog_list) > 200:
+                self.current_state = GAME_OVER
 
             # Calculate speed based on the keys pressed
             self.skyline1.center_x -= 0.5
