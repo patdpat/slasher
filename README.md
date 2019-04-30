@@ -9,11 +9,11 @@
 
 ### Description
 
-| Class        | Responsibility                                           |
-| ------------ | -------------------------------------------------------- |
-| MyGame       | Start the app, rander screen, and update.                |
-| Player       | Handle user input, update game.                          |
-| Frog         | Handle obstale frog, update game.                        |
-| BouncingFrog | Handle bouncing mechanic, update game.                   |
-| CircleFrog   | Handle orbitation mechanic, update game.                 |
-| Heart        | Handle orbitation mechanic,random spawning, update game. |
+| Class        | Responsibility                                                       |
+| ------------ | -------------------------------------------------------------------- |
+| MyGame       | Start the app, store state, render screen, draw sprites, and update. |
+| Player       | Handle user input, update game.                                      |
+| Frog         | Handle obstacle frog, update game.                                   |
+| BouncingFrog | Handle bouncing mechanic, update game.                               |
+| CircleFrog   | Handle orbitation mechanic, update game.                             |
+| Heart        | Handle random spawning, update game.                                 |
