@@ -3,19 +3,37 @@ import arcade
 import math
 import os
 
-SPRITE_SCALING = 0.1
+SPRITE_SCALING = 0.25
 SPRITE_SCALING_FROG = 0.3
+SPRITE_SCALING_HEART = 0.25
 
-
-FROG_SPEED = 0.5
+FROG_SPEED = 0.75
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
-SCREEN_TITLE = "GU MAI AOW LEAW AI SU"
+SCREEN_TITLE = "JUKE DA FROG"
 
 MOVEMENT_SPEED = 5
 SPRITE_SPEED = 0.5
+
 # TODO NO DEATH IF YOU HIT MORE FROG NEXT ROUND YOU GET MORE FRONG AS PENALTY
+
+
+class Player(arcade.Sprite):
+
+    def update(self):
+        self.center_x += self.change_x
+        self.center_y += self.change_y
+
+        if self.left < 0:
+            self.left = 0
+        elif self.right > SCREEN_WIDTH - 1:
+            self.right = SCREEN_WIDTH - 1
+
+        if self.bottom < 0:
+            self.bottom = 0
+        elif self.top > SCREEN_HEIGHT - 1:
+            self.top = SCREEN_HEIGHT - 1
 
 
 class Heart(arcade.Sprite):

@@ -14,27 +14,10 @@ FROG_SPEED = 0.75
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
-SCREEN_TITLE = "SUCK MY DICK"
+SCREEN_TITLE = "JUKE DA FROG"
 
 MOVEMENT_SPEED = 5
 SPRITE_SPEED = 0.5
-
-
-class Player(arcade.Sprite):
-
-    def update(self):
-        self.center_x += self.change_x
-        self.center_y += self.change_y
-
-        if self.left < 0:
-            self.left = 0
-        elif self.right > SCREEN_WIDTH - 1:
-            self.right = SCREEN_WIDTH - 1
-
-        if self.bottom < 0:
-            self.bottom = 0
-        elif self.top > SCREEN_HEIGHT - 1:
-            self.top = SCREEN_HEIGHT - 1
 
 
 class MyGame(arcade.Window):
@@ -239,10 +222,6 @@ class MyGame(arcade.Window):
         for frog in hit_list:
             frog.kill()
             self.score += 1
-
-
-  
-
 # TODO
         for heart in next_list:
             heart.kill()
