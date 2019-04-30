@@ -32,7 +32,7 @@
 
 **Game Development Idea**
 
-    This game is inspired from Feeding Frenzy gameplay. The goal of this game is to survive as long as you can,
+    This game is inspired from Feeding Frenzy gameplay.The goal of this game is to survive as long as you can,
 
     While avoid hitting chracter that you should not supposed to hit.
 
