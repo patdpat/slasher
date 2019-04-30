@@ -32,8 +32,10 @@
 
 **Game Development Idea**
 
-    This game is inspired from Feeding Frenzy gameplay. The goal of this game is to survive as long as you can, avoid hitting chracter that you should not supposed to hit.
+    This game is inspired from Feeding Frenzy gameplay. The goal of this game is to survive as long as you can,
+
+    While avoid hitting chracter that you should not supposed to hit.
 
 **To Play This Game**
 
-    You have to install python and install Arcade before clone the file to you computer.
+    You have to install python and Arcade library before clone the file to you computer.
