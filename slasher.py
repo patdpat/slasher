@@ -151,6 +151,7 @@ class MyGame(arcade.Window):
         """
         Draw "Game over" across the screen.
         """
+        arcade.Sound("sounds/win.mp3").play()
         output = "You  Wins "
         arcade.draw_text(output, 240, 600, arcade.color.WHITE, 54)
         output = "NUMBER OF FROG IS LESS THAN 5"
@@ -295,11 +296,21 @@ class MyGame(arcade.Window):
                 self.player_sprite, self.heart_list)
             # Loop through each colliding sprite, remove it, and add to the hit.
             for frog in hit_list:
+                which_sound = random.randint(1, 4)
+                if which_sound == 1:
+                    arcade.Sound("sounds/frog.mp3").play()
+                elif which_sound == 2:
+                    arcade.Sound("sounds/work.mp3").play()
+                elif which_sound == 3:
+                    arcade.Sound("sounds/work2.mp3").play()
+                elif which_sound == 4:
+                    arcade.Sound("sounds/work3.mp3").play()
                 frog.kill()
                 self.score += 1
                 self.should_add += 1
     # TODO  #Game Logic and ETC.
             for heart in next_list:
+                arcade.Sound("sounds/heart.mp3").play()
                 heart.kill()
                 for i in range(5):
                     target = random.randint(1, len(self.frog_list)-1)
@@ -311,9 +322,11 @@ class MyGame(arcade.Window):
                 self.should_add -= 5
 
             if len(self.frog_list) > 200:
+                arcade.Sound("sounds/lose.mp3").play()
                 self.current_state = GAME_OVER
 
             if len(self.frog_list) <= 5:
+                arcade.Sound("sounds/win.mp3").play()
                 self.current_state = GAME_WIN
 
             # Calculate speed based on the keys pressed
