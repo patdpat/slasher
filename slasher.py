@@ -20,7 +20,7 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
 SCREEN_TITLE = "SLASHER : JUKE THE FROG"
 
-MOVEMENT_SPEED = 5
+MOVEMENT_SPEED = 4
 SPRITE_SPEED = 0.5
 
 
@@ -332,7 +332,6 @@ class MyGame(arcade.Window):
             # Calculate speed based on the keys pressed
             self.skyline1.center_x -= 0.5
             self.skyline2.center_x -= 1
-            # print(delta_time)
             self.player_sprite.change_x = 0
             self.player_sprite.change_y = 0
 
