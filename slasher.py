@@ -149,9 +149,8 @@ class MyGame(arcade.Window):
 
     def draw_game_win(self):
         """
-        Draw "Game over" across the screen.
+        Draw "Game winr" across the screen.
         """
-        arcade.Sound("sounds/win.mp3").play()
         output = "You  Wins "
         arcade.draw_text(output, 240, 600, arcade.color.WHITE, 54)
         output = "NUMBER OF FROG IS LESS THAN 5"
@@ -266,10 +265,11 @@ class MyGame(arcade.Window):
 
         elif self.current_state == GAME_RUNNING:
             self.draw_game()
-        elif self.current_state == GAME_WIN:
-            self.draw_game_win()
         else:
-            self.draw_game_over()
+            if self.current_state == GAME_WIN:
+                self.draw_game_win()
+            else:
+                self.draw_game_over()
 
     def update(self, delta_time):
         # Only move and do things if the game is running.
@@ -324,7 +324,7 @@ class MyGame(arcade.Window):
             if len(self.frog_list) > 200:
                 arcade.Sound("sounds/lose.mp3").play()
                 self.current_state = GAME_OVER
-
+# TODO Fix win sounds
             if len(self.frog_list) <= 5:
                 arcade.Sound("sounds/win.mp3").play()
                 self.current_state = GAME_WIN
