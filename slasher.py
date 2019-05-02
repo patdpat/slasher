@@ -40,20 +40,10 @@ class MyGame(arcade.Window):
         self.skyline1 = make_skyline(SCREEN_WIDTH * 5, 250, (80, 80, 80))
         self.skyline2 = make_skyline(SCREEN_WIDTH * 5, 150, (50, 50, 50))
 
-        # Set the working directory (where we expect to find files) to the same
-        # directory this .py file is in. You can leave this out of your own
-        # code, but it is needed to easily run the examples using "python -m"
-        # as mentioned at the top of this program.
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
         self.current_state = INSTRUCTIONS_PAGE_0
         self.instructions = []
-        texture = arcade.load_texture("images/instructions_0.png")
-        self.instructions.append(texture)
-
-        texture = arcade.load_texture("images/instructions_1.png")
-        self.instructions.append(texture)
-
         # Variables that will hold sprite lists
         self.player_list = None
         self.frog_list = None
@@ -80,7 +70,11 @@ class MyGame(arcade.Window):
         FROG_COUNT = 75
         BOUNCING_FROG_COUNT = 25
         CIRCLE_FROG_COUNT = 30
+        texture = arcade.load_texture("images/instructions_0.png")
+        self.instructions.append(texture)
 
+        texture = arcade.load_texture("images/instructions_1.png")
+        self.instructions.append(texture)
         # Sprite lists
         self.player_list = arcade.SpriteList()
         self.frog_list = arcade.SpriteList()
