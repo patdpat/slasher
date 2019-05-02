@@ -9,19 +9,19 @@
 
 ### How to Play
 
-    1.  Move Character with Keyboard
+    1.  Chracter can be move by keyboard cursor.
 
-    2.  You win by decrese number of frog to become less than 5
+    2.  You win by decrese number of frog to become less than 5.
 
-    3.  You lose by increase number of frog to become more than 200
+    3.  You lose by increase number of frog to become more than 200.
 
-    4.  Floating Melon decrease amount of frogs by 5 per 1 melon hit
+    4.  Floating Melon decrease amount of frogs by 5 per 1 melon hit.
 
-    5.  For every 5 frogs you hit, You'll be punished by getting 6 more frogs
+    5.  For every 5 frogs you hit, You'll be punished by getting 6 more frogs.
 
 **So,What is The Win Condition of This Game**
 
-    Super simeple, You suppress the frog population.
+    Super simple, You suppress the frog population.
 
     Avoid making outrages frog-pocalypse,then you win!!
 
