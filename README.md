@@ -19,9 +19,9 @@
 
     5.  For every 5 frogs you hit, You'll be punished by getting 6 more frogs
 
-**So,The Win Condition of This Game**
+**So,What is The Win Condition of This Game**
 
-    Is really simeple, You suppress the frog population.
+    Super simeple, You suppress the frog population.
 
     Avoid making outrages frog-pocalypse,then you win!!
 
