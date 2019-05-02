@@ -19,6 +19,12 @@
 
     5.  For every 5 frogs you hit, You'll be punished by getting 6 more frogs
 
+**So,The Win Condition of This Game**
+
+    Is really simeple, You suppress the frog population.
+
+    Avoid making outrages frog-pocalypse,then you win!!
+
 ### Components Description
 
 | Class        | Responsibility                                                       |
@@ -36,6 +42,6 @@
 
     While avoid hitting chracter that you should not supposed to hit.
 
-**To Play This Game**
+### To Play This Game
 
-    You have to install python and Arcade library before clone the file to you computer.
+    You have to install python and Arcade library, before clone the game to you computer.
