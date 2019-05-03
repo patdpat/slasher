@@ -46,7 +46,7 @@
 
     You have to install python and Arcade library, before clone the game to you computer.
 
-### Design and Implementation
+### Design patterns and Implementation
 
 **State**
 
