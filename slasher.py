@@ -83,8 +83,8 @@ class MyGame(arcade.Window):
         self.score = 0
         # Set up the player part
         self.player_sprite = Player("images/character.png", SPRITE_SCALING)
-        self.player_sprite.center_x = 50
-        self.player_sprite.center_y = 50
+        self.player_sprite.center_x = 400
+        self.player_sprite.center_y = 400
         self.player_list.append(self.player_sprite)
         # Create frog part
         heart = Heart("images/heart.png", SPRITE_SCALING_HEART)
