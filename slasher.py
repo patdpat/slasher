@@ -137,9 +137,9 @@ class MyGame(arcade.Window):
         Draw an instruction page. Load the page as an image.
         """
         page_texture = self.instructions[page_number]
-        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
-                                      page_texture.width,
-                                      page_texture.height, page_texture, 0)
+        arcade.draw_texture_rectangle(SCREEN_WIDTH//2, SCREEN_HEIGHT//2,
+                                      page_texture.width//2,
+                                      page_texture.height//2, page_texture, 0)
 
     def draw_game_win(self):
         """
