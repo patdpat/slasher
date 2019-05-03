@@ -45,3 +45,13 @@
 ### To Play This Game
 
     You have to install python and Arcade library, before clone the game to you computer.
+
+### Design and Implementation
+
+**State**
+
+    provides a module for state machines, implement by creating game state within class.
+
+**Template**
+
+    provides a basic algorithm, implement by creting method that can be work multiple times.
